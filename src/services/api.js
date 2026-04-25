@@ -1,14 +1,13 @@
 import { mockSkills, mockWorkflows } from '../data/mockData';
+import { CONFIG, getApiUrl } from '../config';
 
-const API_URL = import.meta.env.VITE_CLAWHUB_API_URL;
-const API_KEY = import.meta.env.VITE_CLAWHUB_API_KEY;
-
+const API_URL = getApiUrl();
 const useMockData = !API_URL;
 
 const getHeaders = () => {
   const headers = { 'Content-Type': 'application/json' };
-  if (API_KEY) {
-    headers['Authorization'] = `Bearer ${API_KEY}`;
+  if (CONFIG.API_KEY) {
+    headers['Authorization'] = `Bearer ${CONFIG.API_KEY}`;
   }
   return headers;
 };

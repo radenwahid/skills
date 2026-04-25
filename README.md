@@ -1,43 +1,46 @@
 # OpenClaw Workflow Visualizer Skill
 
-This is a premium, web-based dashboard designed to be uploaded as a "skill" for Clawhub/OpenClaw. It provides a visual, real-time flowchart representation (similar to n8n) of agentic workflows defined in Markdown.
+Dashboard GUI premium untuk Clawhub/OpenClaw. Menampilkan flowchart visual secara real-time bergaya n8n.
 
-## Features
+## Cara Konfigurasi (SANGAT MUDAH)
 
-- **Halaman Utama (Dashboard):** Overview of your OpenClaw agent stats, active workflows, and system status.
-- **Halaman Skill (Skills Page):** A grid view of all the skills currently installed or available on your OpenClaw account.
-- **Halaman Flow (Workflow Visualizer):** 
-  - Dynamic Markdown-to-Flowchart parsing.
-  - Dropdown to select and load different workflows.
-  - Tabs to quickly switch between active workflow views.
-  - Real-time step tracking with API Polling (auto-updates every 3 seconds to see exactly where the bot is currently working).
-- **Premium Aesthetics:** Uses modern Vanilla CSS with dark mode, glassmorphism, and smooth micro-animations.
+Anda tidak perlu mengerti *coding* untuk menyambungkan dashboard ini ke OpenClaw Anda. Semua pengaturan koneksi ada di dalam file **`src/config.js`**.
 
-## How to Connect to Your Clawhub Account
+Buka file `src/config.js` dengan text editor (seperti Notepad, VSCode, dll) dan ubah bagian `API_URL`:
 
-This dashboard is built to be **plug-and-play**. By default, if no API is configured, it will run using simulated Mock Data so you can see how it works instantly.
+### Skenario 1: Jalan di Komputer Sendiri (Local)
+Jika OpenClaw API Anda berjalan di komputer yang sama (misalnya di port 3000):
+```javascript
+export const CONFIG = {
+  API_URL: "http://localhost:3000", // <-- Ganti dengan port OpenClaw Anda
+  API_KEY: "",
+  // ...
+};
+```
 
-To connect it to your live OpenClaw backend:
-1. Rename the `.env.example` file to `.env`.
-2. Open `.env` and fill in your OpenClaw backend URL and API Key:
-   ```env
-   VITE_CLAWHUB_API_URL=https://api.your-clawhub-instance.com
-   VITE_CLAWHUB_API_KEY=your_secret_token
-   ```
-3. The application will automatically detect these settings and start fetching live data and polling for real-time workflow status!
+### Skenario 2: Jalan di VPS / Hosting
+Jika OpenClaw API Anda diletakkan di VPS (server luar):
+```javascript
+export const CONFIG = {
+  API_URL: "http://194.xxx.xxx.xxx:3000", // <-- Ganti IP VPS atau Domain Anda
+  API_KEY: "password-rahasia-anda",       // <-- Isi jika API butuh otentikasi
+  // ...
+};
+```
 
-## How to Run Locally
+> **Catatan:** Jika `API_URL` dibiarkan kosong `""`, aplikasi akan otomatis menjalankan **Mode Simulasi** (menggunakan data bohongan agar Anda bisa melihat animasi flowchartnya bekerja).
 
-1. Make sure you have Node.js installed.
-2. Run `npm install` to install dependencies (Vite, React, React Router, React Flow).
-3. Run `npm run dev` to start the development server.
-4. Open your browser to the local URL provided (usually `http://localhost:5173`).
+## Cara Menjalankan
 
-## How to Upload to Clawhub
+### Saat Development / Testing (Di Komputer Anda)
+1. Install Node.js jika belum ada.
+2. Buka terminal di folder ini, ketik `npm install`.
+3. Ketik `npm run dev` untuk menyalakan server lokal.
+4. Buka `http://localhost:5173` di browser Anda.
 
-1. Ensure your `.env` is configured correctly for your production environment (or set the environment variables in your build platform).
-2. Build the project using `npm run build`. This will generate a `dist` folder containing the optimized, static production files.
-3. Upload the contents of the `dist` folder to Clawhub as your custom dashboard/GUI skill.
-
----
-*Built with Vite, React, and React Flow.*
+### Cara Upload / Deploy (Ke VPS atau Hosting)
+Untuk mengupload dashboard ini agar bisa diakses oleh orang lain secara online:
+1. Pastikan `API_URL` di `config.js` sudah diisi dengan URL / IP VPS backend Anda.
+2. Jalankan perintah `npm run build` di terminal.
+3. Aplikasi akan membuat folder baru bernama **`dist`**.
+4. **Copy semua isi folder `dist`** ke web server Anda (Nginx, Apache, Vercel, Netlify, atau tempat Anda biasa menaruh file HTML/Web).
